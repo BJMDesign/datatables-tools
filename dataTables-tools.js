@@ -11,7 +11,7 @@ $.fn.dataTablesTools = {
 		 * addUnloadHandler: Requires simonwade/form-unload.js.
 		 * You can provide options that will be passed to formUnload().
 		 */
-		addUnloadHandler: null,
+		addUnloadHandler: null
 	}
 };
 $.fn.initDataTables = function( opts ) {
