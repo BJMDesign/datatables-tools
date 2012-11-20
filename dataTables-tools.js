@@ -17,6 +17,13 @@ $.fn.dataTablesTools = {
 $.fn.initDataTables = function( opts ) {
 	var options = $.extend($.fn.dataTablesTools.defaults, opts),
 		$elements = this;
+	if( opts.sAjaxSource ) {
+		$.extend(opts, {
+			bServerSide: true,
+			bProcessing: true,
+			sPaginationType: "full_numbers",
+		});
+	}
 	// handle any dataTables
 	var dataTableInit = $.extend({
 			bJQueryUI: options.jQueryUI,
@@ -150,11 +157,13 @@ $.fn.dataTableSelectable = function( options ) {
 			}
 		};
 		$($table.fnGetNodes()).each(function() {
-			$(this).bind('click', handler)
-				.find('input[type=checkbox]').bind('change', function() {
-					handler.call($(this).closest('tr'));
-				});
 			handler.call(this, null, true);
+		});
+		$(document).on('click', '.dataTable tbody tr', function(e) {
+			handler.call(this, e);
+		});
+		$(document).on('change', '.dataTable input[type=checkbox]', function(e) {
+			handler.call($(this).closest('tr'), e);
 		});
 		$table.trigger('dataTableSelection', [$table.dataTableNumSelected()]);
 		$table.parents().filter('form').submit(function() {
