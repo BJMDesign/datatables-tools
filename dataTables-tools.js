@@ -17,13 +17,6 @@ $.fn.dataTablesTools = {
 $.fn.initDataTables = function( opts ) {
 	var options = $.extend($.fn.dataTablesTools.defaults, opts),
 		$elements = this;
-	if( opts.sAjaxSource ) {
-		$.extend(opts, {
-			bServerSide: true,
-			bProcessing: true,
-			sPaginationType: "full_numbers",
-		});
-	}
 	// handle any dataTables
 	var dataTableInit = $.extend({
 			bJQueryUI: options.jQueryUI,
@@ -35,6 +28,13 @@ $.fn.initDataTables = function( opts ) {
 		customDataTableInit = $elements.data('data-table-init');
 	if( customDataTableInit != undefined ) {
 		$.extend(dataTableInit, customDataTableInit);
+	}
+	if( dataTableInit.sAjaxSource ) {
+		$.extend(dataTableInit, {
+			bServerSide: true,
+			bProcessing: true,
+			sPaginationType: "full_numbers",
+		});
 	}
 	if( options.bootstrap ) {
 		$elements
