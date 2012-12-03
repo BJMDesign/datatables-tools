@@ -44,7 +44,19 @@ $.fn.initDataTables = function( opts ) {
 		});
 	}
 	if( options.onDraw ) {
-		$elements.bind('draw', options.onDraw);
+		$elements.on('draw', options.onDraw);
+	}
+	if( options.addUnloadHandler ) {
+		dataTableInit.fnServerData = function(sSource, aoData, fnCallback, oSettings) {
+			var formUnload = $(this).closest('form').data('formUnload');
+			if( !formUnload || formUnload.confirmUnload() ) {
+				$.fn.DataTable.defaults.fnServerData.call(this, sSource, aoData, fnCallback, oSettings);
+			}
+			else {
+				$(this).closest('.dataTables_wrapper')
+					.find('.dataTables_processing').css('visibility', 'hidden');
+			}
+		};
 	}
 	$elements
 		.not('.noDataTable')
@@ -79,15 +91,18 @@ $.fn.initDataTables = function( opts ) {
 			$(this).closest('form').formUnload(unloadOptions);
 		});
 		if( !unloadOptions.skipInit ) {
-			$elements.bind('init', function() {
+			$elements.on('init', function() {
 				$(this).formUnload('addInputs', $($(this).dataTable().fnGetNodes()));
 			});
 		}
+		$elements.on('draw', function(e, dataTable, json) {
+			$(this).closest('form').formUnload('refresh');
+		});
 	}
 	// selectable rows support
 	$elements.filter(options.selectableRows ? '*' : '.dataTableSelectable')
 		// if we're loading from an AJAX source then we need to listen for the init event
-		.bind('init', function() {
+		.on('init', function() {
 			$(this).dataTableSelectable(options);
 		});
 	// if we're not loading from an AJAX source the 'init' event never gets fired 
