@@ -33,14 +33,14 @@ $.fn.initDataTables = function( opts ) {
 		$.extend(dataTableInit, {
 			bServerSide: true,
 			bProcessing: true,
-			sPaginationType: "full_numbers",
+			sPaginationType: "full_numbers"
 		});
 	}
 	if( options.bootstrap ) {
 		$elements
 			.addClass('table-striped table-bordered');
 		$.extend($.fn.dataTableExt.oStdClasses, {
-		    'sWrapper': 'dataTables_wrapper form-inline'
+			'sWrapper': 'dataTables_wrapper form-inline'
 		});
 	}
 	if( options.onDraw ) {
