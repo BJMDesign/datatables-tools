@@ -159,9 +159,9 @@ $.fn.dataTableSelectable = function( options ) {
 				return;
 			}
 			// if the row was clicked then toggle the checkbox
-			if( e && !$checkbox.filter(e.target).length ) {
+			if( e && !$checkbox.is(e.target) ) {
 				checked = $checkbox.prop('checked', !$checkbox.prop('checked'));
-				$checkbox.trigger('change');
+				$checkbox.trigger('change', e.target);
 			}
 			else { // it's already been toggled
 				checked = $checkbox.prop('checked') || false;
@@ -174,10 +174,10 @@ $.fn.dataTableSelectable = function( options ) {
 		$($table.fnGetNodes()).each(function() {
 			handler.call(this, null, true);
 		});
-		$(document).on('click', '.dataTable tbody tr', function(e) {
+		$(this).on('click', '.dataTable tbody tr', function(e) {
 			handler.call(this, e);
 		});
-		$(document).on('change', '.dataTable input[type=checkbox]', function(e) {
+		$(this).on('change', '.dataTable input[type=checkbox]', function(e) {
 			handler.call($(this).closest('tr'), e);
 		});
 		$table.trigger('dataTableSelection', [$table.dataTableNumSelected()]);
